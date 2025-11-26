@@ -3,71 +3,100 @@
   <head>
     <meta charset="UTF-8" />
     <title>My Personal Dashboard</title>
+
+    <!-- Docsify theme (layout: left sidebar + content) -->
     <link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/vue.css" />
+    <!-- Your custom styles -->
     <link rel="stylesheet" href="dashboard.css" />
 
-    <!-- THEME INITIALIZER -->
     <script>
-    (function () {
+      (function () {
         const THEME_KEY = 'self-record-theme';
         const SIDEBAR_KEY = 'self-record-sidebar';
 
-        const prefersDark = window.matchMedia &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches;
+        // ---------- THEME ----------
+        const prefersDark =
+          window.matchMedia &&
+          window.matchMedia('(prefers-color-scheme: dark)').matches;
         const savedTheme = localStorage.getItem(THEME_KEY);
         const theme = savedTheme || (prefersDark ? 'dark' : 'light');
 
         function applyTheme(t) {
-        document.documentElement.setAttribute('data-theme', t);
-        localStorage.setItem(THEME_KEY, t);
-        const btn = document.getElementById('theme-toggle');
-        if (btn) btn.textContent = t === 'dark' ? '☀️' : '🌙';
-        }
-
-        function applySidebar(open) {
-        document.body.classList.toggle('sidebar-hidden', !open);
-        localStorage.setItem(SIDEBAR_KEY, open ? 'open' : 'closed');
-        const btn = document.getElementById('sidebar-toggle');
-        if (btn) btn.textContent = open ? '«' : '»';
+          document.documentElement.setAttribute('data-theme', t);
+          localStorage.setItem(THEME_KEY, t);
+          const btn = document.getElementById('theme-toggle');
+          if (btn) btn.textContent = t === 'dark' ? '☀️' : '🌙';
         }
 
         window.__toggleTheme = function () {
-        const current =
+          const current =
             document.documentElement.getAttribute('data-theme') || 'light';
-        applyTheme(current === 'dark' ? 'light' : 'dark');
+          applyTheme(current === 'dark' ? 'light' : 'dark');
         };
+
+        applyTheme(theme);
+
+        // ---------- SIDEBAR ----------
+        function applySidebar(open) {
+          document.body.classList.toggle('sidebar-hidden', !open);
+          localStorage.setItem(SIDEBAR_KEY, open ? 'open' : 'closed');
+          const btn = document.getElementById('sidebar-toggle');
+          if (btn) btn.textContent = open ? '«' : '»';
+        }
 
         window.__toggleSidebar = function () {
-        const isHidden = document.body.classList.contains('sidebar-hidden');
-        applySidebar(isHidden); // if hidden → open, else close
+          const isHidden = document.body.classList.contains('sidebar-hidden');
+          applySidebar(isHidden);
         };
 
-        // initial
-        const savedSidebar = localStorage.getItem(SIDEBAR_KEY) || 'open';
-        applyTheme(theme);
-        window.addEventListener('DOMContentLoaded', function () {
-        applySidebar(savedSidebar !== 'closed');
-        });
-    })();
-    </script>
+        // Docsify plugin to apply sidebar state on every route change
+        function sidebarPlugin(hook, vm) {
+          hook.doneEach(function () {
+            const path = vm.route.path; // e.g. '/', '/daily/today'
+            const saved = localStorage.getItem(SIDEBAR_KEY);
 
-  </head>
+            if (path === '/' || path === '/README') {
+              // On the dashboard:
+              // if user never decided before → default CLOSED
+              if (!saved) {
+                applySidebar(false);
+              } else {
+                applySidebar(saved === 'open');
+              }
+            } else {
+              // On other pages: default OPEN (unless user chose closed)
+              if (!saved) {
+                applySidebar(true);
+              } else {
+                applySidebar(saved === 'open');
+              }
+            }
+          });
+        }
+
+        window.$docsify = window.$docsify || {};
+        window.$docsify.plugins = (window.$docsify.plugins || []).concat(
+          sidebarPlugin
+        );
+      })();
+    </script>
+  </head >
 
   <body>
-    <!-- THEME TOGGLE BUTTON -->
+    <!-- Buttons in the top-right -->
     <button id="theme-toggle" onclick="__toggleTheme()"></button>
     <button id="sidebar-toggle" onclick="__toggleSidebar()"></button>
 
     <div id="app"></div>
 
     <script>
-      window.$docsify = {
-        name: '', // we hid/removed the ugly app-name
+      window.$docsify = Object.assign(window.$docsify || {}, {
+        name: '',
         repo: '',
         homepage: 'README.md',
         loadSidebar: true,
         subMaxLevel: 2,
-      };
+      });
     </script>
 
     <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
