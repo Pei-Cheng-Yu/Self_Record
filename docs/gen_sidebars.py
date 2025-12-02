@@ -46,7 +46,7 @@ def rel_url(path_from_root: str) -> str:
 
 
 def has_readme(dirpath: str) -> str | None:
-    for cand in ["README.md", "readme.md"]:
+    for cand in ["README.md", "_sidebar.md"]:
         p = os.path.join(dirpath, cand)
         if os.path.isfile(p) and is_markdown(p):
             return p
@@ -133,12 +133,9 @@ def generate_single_sidebar(root_abs: str, out_path: str):
 def generate_per_folder_sidebars(root_abs: str):
     """
     Create _sidebar.md in every folder under root, EXCEPT the root itself.
-
-    Each sidebar will contain:
-      - A '🏠 Dashboard' link to the root README.md (if it exists)
-      - A '⬅ Back to <Parent>' link to the parent folder's README (if it exists)
-      - A link to this folder's own README (if it exists)
-      - Auto-generated list of files and subfolders (paths root-relative)
+    Each sidebar:
+      - has a Dashboard link to root README
+      - links inside use paths relative to root_abs (docs/)
     """
     root_readme = has_readme(root_abs)
     root_readme_rel = (
@@ -163,46 +160,21 @@ def generate_per_folder_sidebars(root_abs: str):
             continue
 
         sidebar_path = os.path.join(dirpath, "_sidebar.md")
-
-        # figure out parent README (for the "../" link)
-        parent_dir = os.path.dirname(dirpath)
-        parent_readme = None
-        parent_rel = None
-        parent_title = None
-
-        if parent_dir.startswith(root_abs) and parent_dir != root_abs:
-            parent_readme = has_readme(parent_dir)
-            if parent_readme:
-                parent_rel = os.path.relpath(parent_readme, root_abs)
-                parent_title = display_name_from_filename(
-                    os.path.basename(parent_dir)
-                )
-
         with open(sidebar_path, "w", encoding="utf-8") as f:
-            # 1) Dashboard link (always root README)
+            # 1) Dashboard link (always root-relative)
             if root_readme_rel:
                 f.write(
-                    f"- [🏠 Dashboard]({rel_url(root_readme_rel)})\n"
+                    f"- [🏠 Dashboard]({rel_url(root_readme_rel)})\n\n"
                 )
 
-            # 2) "../" link to parent folder (if it has README)
-            if parent_rel and parent_title:
-                f.write(
-                    f"- [⬅ Back to {parent_title}]({rel_url(parent_rel)})\n\n"
-                )
-            else:
-                f.write("\n")  # blank line spacer
-
-            # 3) This folder's own README, if any (root-relative)
+            # 3) This folder's own README, if any (root-relative path)
             readme = has_readme(dirpath)
             if readme:
                 rel = os.path.relpath(readme, root_abs)
-                title = display_name_from_filename(
-                    os.path.basename(dirpath) or "Home"
-                )
-                f.write(f"- [{title}]({rel_url(rel)})\n")
+                # Always show as "⬅ Back", but link to this folder's README
+                f.write(f"- [⬅ Back]({rel_url(rel)})\n")
 
-            # 4) The rest of the tree inside this folder (root-relative paths)
+            # 3) Rest of this folder (paths also root-relative)
             write_sidebar(dirpath, f, base_dir=root_abs, depth=0)
 
         print(f"generated: {sidebar_path}")
