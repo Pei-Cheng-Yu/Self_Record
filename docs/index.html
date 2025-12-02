@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/vue.css" />
     <!-- Your custom styles -->
     <link rel="stylesheet" href="dashboard.css" />
+    
 
     <script>
       (function () {
@@ -88,7 +89,10 @@
     <button id="sidebar-toggle" onclick="__toggleSidebar()"></button>
 
     <div id="app"></div>
-
+    <script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/docsify-mermaid@latest/dist/docsify-mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/rizdaprasetya/docsify-fix-pageload-scroll@master/index.js"></script>
     <script>
       window.$docsify = Object.assign(window.$docsify || {}, {
         name: '',
@@ -98,7 +102,6 @@
         subMaxLevel: 2,
       });
     </script>
-
     <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
   </body>
 </html>
