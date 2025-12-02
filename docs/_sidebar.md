@@ -1,23 +1,26 @@
-* [🏠 Dashboard](/)
-
-* **Daily**
-  * [Today](daily/today.md)
-  * [Archive](daily/archive.md)
-
-* **Projects**
-  * [AI Hackathon](projects/ai-hackathon.md)
-  * [CertCube Lab System](projects/certcube.md)
-
-* **Open Source Contributions**
-  * [Airflow Contributions](open-sources/airflow-contrib/Issue/Issue.md)
-
-* **School Lab / Internship**
-  * [NCKU Lab Notes](school-lab/ncku-lab.md)
-
-* **School Courses**
-  * [Parallel Computing](school-courses/parallel-computing.md)
-  * [PIC Microcontroller](school-courses/pic-microcontroller.md)
-
-* **Reviews**
-  * [Weekly Review](reviews/weekly.md)
-  * [Monthly Summary](reviews/monthly.md)
+- [docs](README.md)
+- [daily](daily/_sidebar.md)
+  - [archive](daily/archive.md)
+  - [2025](daily/2025/_sidebar.md)
+    - [2025 11 26](daily/2025/2025-11-26.md)
+    - [2025 11 27](daily/2025/2025-11-27.md)
+    - [2025 11 28](daily/2025/2025-11-28.md)
+    - [2025 11 29](daily/2025/2025-11-29.md)
+- learning note
+- [open sources](open-sources/_sidebar.md)
+  - [index](open-sources/index.md)
+  - [airflow contrib](open-sources/airflow-contrib/_sidebar.md)
+    - [Issue](open-sources/airflow-contrib/Issue.md)
+    - [PR](open-sources/airflow-contrib/PR.md)
+- [projects](projects/_sidebar.md)
+  - interviewer
+    - [agent flow](projects/interviewer/agent_flow.md)
+    - [project note](projects/interviewer/project_note.md)
+    - [project structure](projects/interviewer/project_structure.md)
+- [reviews](reviews/_sidebar.md)
+- [school courses](school-courses/_sidebar.md)
+- [school lab](school-lab/_sidebar.md)
+  - [ACM](school-lab/ACM/_sidebar.md)
+    - [Issue](school-lab/ACM/Issue.md)
+    - [note](school-lab/ACM/note.md)
+    - [PR](school-lab/ACM/PR.md)

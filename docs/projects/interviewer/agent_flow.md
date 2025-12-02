@@ -2,7 +2,7 @@ Workflow Visualization (LangGraph / State Diagram)
 
 The core optimization is the **parallel execution** step inside the loop, where the **next question is prepared while the current answer is scored**.
 
-```mermaid
+```` mermaid
 stateDiagram-v2
     direction TB
 
@@ -49,4 +49,4 @@ stateDiagram-v2
     [*] --> Init
     Init --> Interview
     CaseAsk --> Final
-```
+````
