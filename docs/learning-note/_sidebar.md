@@ -1,3 +1,3 @@
 - [🏠 Dashboard](README.md)
 
-- [⬅ Back](learning_note/README.md)
+- [⬅ Back](learning-note/README.md)

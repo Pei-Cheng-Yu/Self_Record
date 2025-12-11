@@ -6,13 +6,13 @@ This section contains notes, logs, and links related to **Interviewer**.
 
 <div class="dashboard-grid">
 
-  <a class="card" href="#/projects/interviewer/agent_flow">
-    <h2>📄 Agent Flow</h2>
-    <p>Page in this section.</p>
+  <a class="card" href="#/projects/interviewer/project_note/README.md">
+    <h2>📁 Project Note</h2>
+    <p>Notes, logs, and links for this section.</p>
   </a>
 
-  <a class="card" href="#/projects/interviewer/project_note">
-    <h2>📄 Project Note</h2>
+  <a class="card" href="#/projects/interviewer/agent_flow">
+    <h2>📄 Agent Flow</h2>
     <p>Page in this section.</p>
   </a>
 
