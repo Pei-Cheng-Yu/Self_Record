@@ -26,4 +26,9 @@ This section contains notes, logs, and links related to **2025**.
     <p>Page in this section.</p>
   </a>
 
+  <a class="card" href="#/daily/2025/2025-12-8_to_14">
+    <h2>📄 2025 12 8 To 14</h2>
+    <p>Page in this section.</p>
+  </a>
+
 </div>
