@@ -132,10 +132,12 @@ def generate_single_sidebar(root_abs: str, out_path: str):
 
 def generate_per_folder_sidebars(root_abs: str):
     """
-    Create _sidebar.md in every folder under root, EXCEPT the root itself.
-    Each sidebar:
-      - has a Dashboard link to root README
-      - links inside use paths relative to root_abs (docs/)
+    Create _sidebar.md in every folder under root.
+    Structure:
+      1. Dashboard Link
+      2. 'Back to Parent' Link (if parent has README)
+      3. Current Folder Title (linked to current README) - Acts as 'Back' for files
+      4. List of files
     """
     root_readme = has_readme(root_abs)
     root_readme_rel = (
@@ -143,39 +145,63 @@ def generate_per_folder_sidebars(root_abs: str):
     )
 
     for dirpath, dirnames, filenames in os.walk(root_abs):
-        # filter out hidden / ignored dirs
+        # Filter directories
         dirnames[:] = [
             d for d in dirnames
             if not d.startswith(".") and not should_ignore(d)
         ]
 
         basename = os.path.basename(dirpath)
-
-        # skip ignored dirs completely (except root itself)
-        if should_ignore(basename) and dirpath != root_abs:
-            continue
-
-        # DO NOT generate _sidebar.md for root itself
+        
+        # Skip root folder sidebar generation
         if dirpath == root_abs:
             continue
 
+        if should_ignore(basename):
+            continue
+
         sidebar_path = os.path.join(dirpath, "_sidebar.md")
+        
         with open(sidebar_path, "w", encoding="utf-8") as f:
-            # 1) Dashboard link (always root-relative)
+            # --- 1. Dashboard Link ---
             if root_readme_rel:
-                f.write(
-                    f"- [🏠 Dashboard]({rel_url(root_readme_rel)})\n\n"
-                )
+                f.write(f"- [🏠 Dashboard]({rel_url(root_readme_rel)})\n")
 
-            # 3) This folder's own README, if any (root-relative path)
-            readme = has_readme(dirpath)
-            if readme:
-                rel = os.path.relpath(readme, root_abs)
-                # Always show as "⬅ Back", but link to this folder's README
-                f.write(f"- [⬅ Back]({rel_url(rel)})\n")
+            # --- 2. Back to Parent Link ---
+            parent_dir = os.path.dirname(dirpath)
+            
+            # Ensure we are not going above root and parent isn't root (optional preference)
+            # If you want "Back to Root" to appear as "Back to Parent" as well, remove 'parent_dir != root_abs'
+            if parent_dir.startswith(root_abs): 
+                parent_readme = has_readme(parent_dir)
+                if parent_readme:
+                    # Get pretty name of parent
+                    if parent_dir == root_abs:
+                        parent_name = "Home" 
+                    else:
+                        parent_name = display_name_from_filename(os.path.basename(parent_dir))
+                    
+                    rel_parent = os.path.relpath(parent_readme, root_abs)
+                    f.write(f"- [⬅ Back to {parent_name}]({rel_url(rel_parent)})\n")
 
-            # 3) Rest of this folder (paths also root-relative)
-            write_sidebar(dirpath, f, base_dir=root_abs, depth=0)
+            # --- 3. Current Folder Header (The "Index" Button) ---
+            # This acts as the "Back" button for files inside this folder
+            current_readme = has_readme(dirpath)
+            folder_title = display_name_from_filename(basename)
+            
+            f.write("\n") # Spacer
+            
+            if current_readme:
+                # Link to this folder's own README
+                rel_current = os.path.relpath(current_readme, root_abs)
+                # We use Bold to indicate "You are here-ish"
+                f.write(f"- **[📂 {folder_title}]({rel_url(rel_current)})**\n")
+            else:
+                f.write(f"- **📂 {folder_title}**\n")
+
+            # --- 4. File Tree ---
+            # We treat the current folder as the "base" for the tree view
+            write_sidebar(dirpath, f, base_dir=root_abs, depth=1)
 
         print(f"generated: {sidebar_path}")
 

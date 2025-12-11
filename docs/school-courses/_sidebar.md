@@ -1,3 +1,4 @@
 - [🏠 Dashboard](README.md)
+- [⬅ Back to Home](README.md)
 
-- [⬅ Back](school-courses/README.md)
+- **[📂 school courses](school-courses/README.md)**
