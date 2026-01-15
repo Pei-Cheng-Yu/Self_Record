@@ -2,6 +2,11 @@
 - [⬅ Back to Home](README.md)
 
 - **[📂 projects](projects/README.md)**
+  - [BodyBuilder](projects/BodyBuilder/README.md)
+    - [project note](projects/BodyBuilder/project_note/README.md)
+      - [outline](projects/BodyBuilder/project_note/outline.md)
+      - [agents](projects/BodyBuilder/project_note/agents/README.md)
+        - [consultant agnent](projects/BodyBuilder/project_note/agents/consultant_agnent.md)
   - [interviewer](projects/interviewer/README.md)
     - [agent flow](projects/interviewer/agent_flow.md)
     - [project structure](projects/interviewer/project_structure.md)
